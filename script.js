@@ -448,186 +448,165 @@ class UIManager {
   }
 }
 
-class CharcoalExperience {
-  constructor(containerId) {
-    this.container = document.getElementById(containerId);
-    this.reducedMotion = window.matchMedia?.('(prefers-reduced-motion: reduce)').matches ?? false;
-    if (!this.container || this.reducedMotion) return;
-    this.loadThree();
-  }
+function initInkBackground(canvas = document.getElementById('inkCanvas')) {
+  const container = canvas?.parentElement || document.getElementById('webgl');
+  if (!canvas || !container) return;
 
-  async loadThree() {
-    try {
-      const THREE = await import('https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js');
-      this.initScene(THREE);
-    } catch (error) {
-      console.warn('[Javier Dibujos] WebGL desactivado:', error);
-    }
-  }
+  const reducedMotion = window.matchMedia?.('(prefers-reduced-motion: reduce)').matches ?? false;
+  const context = canvas.getContext('2d');
 
-  initScene(THREE) {
-    this.scene = new THREE.Scene();
-    this.camera = new THREE.PerspectiveCamera(48, window.innerWidth / window.innerHeight, 0.1, 100);
-    this.camera.position.z = 8;
+  if (!context) return;
 
-    this.renderer = new THREE.WebGLRenderer({ antialias: false, alpha: true, powerPreference: 'high-performance' });
-    this.dpr = Math.min(window.devicePixelRatio || 1, 1.5);
-    this.renderer.setPixelRatio(this.dpr);
-    this.renderer.setSize(window.innerWidth, window.innerHeight, false);
-    this.container.appendChild(this.renderer.domElement);
+  const state = {
+    width: 0,
+    height: 0,
+    particles: [],
+    pointer: { x: 0, y: 0, active: false },
+    lastTime: 0,
+    pointerCooldown: 0
+  };
 
-    this.createCharcoalDust(THREE);
-    this.addInteractivity(THREE);
+  const randomBetween = (min, max) => Math.random() * (max - min) + min;
 
-    this.clock = new THREE.Clock();
-    this.isDocumentVisible = !document.hidden;
-    this.animate();
+  const resizeCanvas = () => {
+    const ratio = Math.min(window.devicePixelRatio || 1, 2);
+    state.width = window.innerWidth;
+    state.height = window.innerHeight;
+    canvas.width = Math.max(1, Math.floor(state.width * ratio));
+    canvas.height = Math.max(1, Math.floor(state.height * ratio));
+    canvas.style.width = `${state.width}px`;
+    canvas.style.height = `${state.height}px`;
+    context.setTransform(ratio, 0, 0, ratio, 0, 0);
+  };
 
-    window.addEventListener('resize', () => this.resize(), { passive: true });
-    document.addEventListener('visibilitychange', () => {
-      this.isDocumentVisible = !document.hidden;
-      if (this.isDocumentVisible && !this.frameId) this.animate();
-    });
-  }
+  const createParticle = (x = Math.random() * state.width, y = Math.random() * state.height) => ({
+    x,
+    y,
+    radius: randomBetween(1.6, 4.5),
+    maxRadius: randomBetween(8, 22),
+    growth: randomBetween(0.02, 0.08),
+    opacity: randomBetween(0.08, 0.42),
+    fade: randomBetween(0.003, 0.012),
+    vx: randomBetween(-0.4, 0.4),
+    vy: randomBetween(-0.2, 0.3),
+    drift: randomBetween(0.98, 0.996),
+    hue: Math.random() > 0.5 ? 6 : 18,
+    alpha: Math.random() * 0.75 + 0.2
+  });
 
-  createCharcoalDust(THREE) {
-    const isMobile = window.innerWidth < 700;
-    const count = isMobile ? 400 : 1200;
-    const positions = new Float32Array(count * 3);
-    const phases = new Float32Array(count);
-    const sizes = new Float32Array(count);
+  const seedParticles = () => {
+    const count = window.innerWidth < 700 ? 20 : 46;
+    state.particles = Array.from({ length: count }, () => createParticle());
+  };
 
-    for (let i = 0; i < count; i++) {
-      const n = i * 3;
-      positions[n] = (Math.random() - 0.5) * 20;
-      positions[n + 1] = (Math.random() - 0.5) * 12;
-      positions[n + 2] = (Math.random() - 0.5) * 8;
-      phases[i] = Math.random() * Math.PI * 2;
-      sizes[i] = 0.015 + Math.random() * 0.04;
-    }
+  const drawParticle = (particle) => {
+    const gradient = context.createRadialGradient(
+      particle.x,
+      particle.y,
+      0,
+      particle.x,
+      particle.y,
+      particle.radius * 3
+    );
 
-    const geometry = new THREE.BufferGeometry();
-    geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
-    geometry.setAttribute('aPhase', new THREE.BufferAttribute(phases, 1));
-    geometry.setAttribute('aSize', new THREE.BufferAttribute(sizes, 1));
+    const red = particle.hue === 6 ? 140 : 180;
+    const green = particle.hue === 6 ? 20 : 35;
+    const blue = particle.hue === 6 ? 22 : 42;
 
-    this.material = new THREE.ShaderMaterial({
-      transparent: true,
-      depthWrite: false,
-      blending: THREE.NormalBlending,
-      uniforms: {
-        uTime: { value: 0 },
-        uMouse: { value: new THREE.Vector2() },
-        uPixelRatio: { value: this.dpr }
-      },
-      vertexShader: `
-        attribute float aPhase;
-        attribute float aSize;
-        uniform float uTime;
-        uniform float uPixelRatio;
-        uniform vec2 uMouse;
-        varying float vAlpha;
-        void main() {
-          vec3 p = position;
-          vec2 force = uMouse * 3.0 - p.xy * 0.2;
-          float dist = length(force);
-          float effect = smoothstep(2.5, 0.0, dist);
-          float angle = effect * 3.0;
-          float s = sin(angle);
-          float c = cos(angle);
-          float tempX = p.x;
-          p.x = tempX * c - p.y * s;
-          p.y = tempX * s + p.y * c;
-          p.xy += normalize(force + 0.0001) * (effect * 0.8);
-          p.x += cos(uTime * 0.15 + aPhase) * 0.15;
-          p.y += sin(uTime * 0.2 + aPhase) * 0.15;
-          vec4 mv = modelViewMatrix * vec4(p, 1.0);
-          gl_Position = projectionMatrix * mv;
-          float pulse = 0.5 + 0.5 * sin(uTime + aPhase);
-          gl_PointSize = aSize * 900.0 * uPixelRatio * pulse / max(1.0, -mv.z);
-          vAlpha = pulse * (1.0 - effect * 0.5);
-        }
-      `,
-      fragmentShader: `
-        varying float vAlpha;
-        void main() {
-          vec2 uv = gl_PointCoord - 0.5;
-          float d = length(uv);
-          float alpha = smoothstep(0.5, 0.1, d) * 0.5 * vAlpha;
-          gl_FragColor = vec4(0.76, 0.76, 0.76, alpha * 0.7);
-        }
-      `
+    gradient.addColorStop(0, `rgba(${red}, ${green}, ${blue}, ${particle.opacity})`);
+    gradient.addColorStop(0.55, `rgba(${red}, ${green}, ${blue}, ${particle.opacity * 0.35})`);
+    gradient.addColorStop(1, `rgba(${red}, ${green}, ${blue}, 0)`);
+
+    context.beginPath();
+    context.fillStyle = gradient;
+    context.arc(particle.x, particle.y, particle.radius * 3, 0, Math.PI * 2);
+    context.fill();
+  };
+
+  const spawnBurst = (x, y, amount = 4) => {
+    const newParticles = Array.from({ length: amount }, () => {
+      const particle = createParticle(x, y);
+      particle.vx *= 1.8;
+      particle.vy *= 1.6;
+      return particle;
     });
 
-    this.particles = new THREE.Points(geometry, this.material);
-    this.scene.add(this.particles);
-  }
-
-  addInteractivity(THREE) {
-    this.target = new THREE.Vector2();
-    this.mouse = new THREE.Vector2();
-
-    window.addEventListener('pointermove', (event) => {
-      this.target.x = (event.clientX / window.innerWidth - 0.5) * 2;
-      this.target.y = -(event.clientY / window.innerHeight - 0.5) * 2;
-    }, { passive: true });
-
-    if (window.gsap && window.ScrollTrigger) {
-      window.gsap.to(this.camera.position, {
-        z: 2.5,
-        y: -1.5,
-        ease: "none",
-        scrollTrigger: {
-          trigger: "body",
-          start: "top top",
-          end: "bottom bottom",
-          scrub: 1.2
-        }
-      });
-
-      window.gsap.to(this.particles.rotation, {
-        y: Math.PI * 0.4,
-        x: Math.PI * 0.1,
-        ease: "none",
-        scrollTrigger: {
-          trigger: "body",
-          start: "top top",
-          end: "bottom bottom",
-          scrub: 2
-        }
-      });
+    state.particles.push(...newParticles);
+    if (state.particles.length > 120) {
+      state.particles = state.particles.slice(-120);
     }
-  }
+  };
 
-  animate() {
-    if (!this.isDocumentVisible) {
-      this.frameId = null;
-      return;
+  const updateParticles = (delta) => {
+    const movementScale = Math.min(delta / 16.67, 2);
+
+    state.particles = state.particles.filter((particle) => {
+      particle.x += (particle.vx + (state.pointer.active ? (state.pointer.x - particle.x) * 0.0006 : 0)) * movementScale;
+      particle.y += (particle.vy + (state.pointer.active ? (state.pointer.y - particle.y) * 0.0006 : 0)) * movementScale;
+      particle.vx *= particle.drift;
+      particle.vy *= particle.drift;
+      particle.radius = Math.min(particle.radius + particle.growth * movementScale, particle.maxRadius);
+      particle.opacity -= particle.fade * movementScale;
+
+      if (particle.opacity <= 0.02) return false;
+
+      if (particle.x < -80 || particle.x > state.width + 80 || particle.y < -80 || particle.y > state.height + 80) {
+        return false;
+      }
+
+      drawParticle(particle);
+      return true;
+    });
+
+    if (state.particles.length < 36) {
+      const spawnCount = 8;
+      for (let i = 0; i < spawnCount; i += 1) {
+        state.particles.push(createParticle());
+      }
+    }
+  };
+
+  const handlePointerMove = (event) => {
+    const now = performance.now();
+    state.pointer.x = event.clientX;
+    state.pointer.y = event.clientY;
+    state.pointer.active = true;
+
+    if (now - state.pointerCooldown > 22) {
+      spawnBurst(event.clientX, event.clientY, 2);
+      state.pointerCooldown = now;
+    }
+  };
+
+  const animate = (time) => {
+    const delta = time - state.lastTime || 16.67;
+    state.lastTime = time;
+
+    context.clearRect(0, 0, state.width, state.height);
+
+    if (!reducedMotion) {
+      updateParticles(delta);
     }
 
-    this.frameId = window.requestAnimationFrame(() => this.animate());
-    const time = this.clock.getElapsedTime();
+    if (!reducedMotion) {
+      window.requestAnimationFrame(animate);
+    }
+  };
 
-    this.mouse.lerp(this.target, 0.06);
+  resizeCanvas();
+  seedParticles();
 
-    this.material.uniforms.uTime.value = time;
-    this.material.uniforms.uMouse.value.copy(this.mouse);
-
-    this.particles.rotation.y += (this.mouse.x * 0.2 - this.particles.rotation.y) * 0.05;
-    this.particles.rotation.x += (-this.mouse.y * 0.2 - this.particles.rotation.x) * 0.05;
-
-    this.renderer.render(this.scene, this.camera);
-  }
-
-  resize() {
-    this.dpr = Math.min(window.devicePixelRatio || 1, window.innerWidth < 700 ? 1.05 : 1.5);
-    this.renderer.setPixelRatio(this.dpr);
-    this.renderer.setSize(window.innerWidth, window.innerHeight, false);
-    this.camera.aspect = window.innerWidth / window.innerHeight;
-    this.camera.updateProjectionMatrix();
+  if (!reducedMotion) {
+    if (window.matchMedia?.('(pointer:fine)').matches) {
+      window.addEventListener('pointermove', handlePointerMove, { passive: true });
+    }
+    window.addEventListener('resize', resizeCanvas, { passive: true });
+    window.requestAnimationFrame(animate);
+  } else {
+    context.fillStyle = '#050505';
+    context.fillRect(0, 0, state.width, state.height);
   }
 }
 
-document.addEventListener('DOMContentLoaded', () => {
-  new UIManager();
-});
+new UIManager();
+initInkBackground();
