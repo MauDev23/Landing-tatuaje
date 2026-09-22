@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#090909" />
+  <meta name="color-scheme" content="dark" />
+  <meta name="description"
+    content="Javier Dibujos — Arte realista en carbón. Obras originales y retratos personalizados." />
+  <title>Javier Dibujos | Arte realista y retratos personalizados</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;600;700&family=Manrope:wght@300;400;500;600;700;800&display=swap"
+    rel="stylesheet">
+
+  <link rel="stylesheet" href="styles.css" />
+</head>
+
+<body>
+<div id="webgl" aria-hidden="true"></div>
+  <div class="noise" aria-hidden="true"></div>
+
+  <div class="loader" id="loader" role="status" aria-live="polite">
+    <div class="loader-mark">Realismo En Tu Piel</div>
+    <div class="loader-line"><span></span></div>
+  </div>
+
+  <header class="site-header">
+    <a class="brand" href="#inicio" aria-label="Javier Dibujos">
+      <span>inicio</span>
+    </a>
+
+    <button class="menu-toggle" id="menuToggle" type="button" aria-label="Abrir menú" aria-controls="nav"
+      aria-expanded="false">
+      <span></span><span></span>
+    </button>
+
+    <nav class="nav" id="nav" aria-label="Navegación principal">
+      <a href="#inicio">Inicio</a>
+      <a href="#obras">Obras</a>
+      <a href="#sobre-mi">Sobre mí</a>
+      <a href="#proceso">Proceso</a>
+      <a href="#contacto">Contacto</a>
+      <a href="#contacto" class="btn-header">
+        <span>COTIZAR RETRATO</span></a>
+    </nav>
+  </header>
+
+  <main>
+    <section class="hero section" id="inicio">
+      <div class="hero-copy reveal">
+        <p class="eyebrow">Tatuajes Realistas</p>
+        <h1><span>JAVIER</span><em>DIBUJOS</em></h1>
+        <p class="hero-text">
+          Dibujos hechos a mano.<br>
+          Cada obra es única, creada con pasión,<br>
+          paciencia y detalles que cuentan historias.
+        </p>
+        <a class="btn magnetic" href="#obras">
+          <span>VER OBRAS</span><i>↗</i>
+        </a>
+      </div>
+
+      <div class="hero-art image-reveal parallax" data-speed="0.16">
+        <img src="assets HD/about.webp" alt="Javier pintando sobre un lienzo" loading="eager"
+          decoding="async" />
+        <div class="hero-frame" aria-hidden="true"></div>
+        <div class="hero-caption" aria-label="Información de la obra">
+          <span>JavierDibujos</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="split section" id="sobre-mi">
+      <div class="split-media image-reveal parallax" data-speed="0.10">
+        <img src="assets HD/Captura de pantalla 2026-09-13 030022.webp" alt="Javier trabajando en una obra frente a un caballete" loading="lazy"
+          decoding="async" />
+        <span class="signature">Javier</span>
+      </div>
+
+      <div class="split-copy reveal">
+        <p class="section-kicker">SOBRE MÍ</p>
+        <h2>DIBUJAR ES<br><span>CONTAR SIN HABLAR.</span></h2>
+        <p>Desde pequeño encontré en el dibujo mi forma de expresarme. Hoy cada obra que creo lleva una parte de mí.</p>
+        <p>No es solo arte, es dedicación, disciplina y amor por los detalles.</p>
+        <a class="text-link magnetic" href="#contacto">CONOCER MÁS <span>↗</span></a>
+      </div>
+    </section>
+
+    <section class="works section" id="obras">
+      <div class="section-head reveal">
+        <p class="section-kicker">OBRAS</p>
+        <h2>OBRAS DESTACADAS</h2>
+        
+      </div>
+
+      <div class="works-carousel" data-carousel>
+        <div class="carousel-toolbar">
+          <p class="carousel-hint">Desliza para explorar la colección</p>
+        </div>
+
+        <div class="works-grid" role="region" aria-roledescription="carrusel" aria-label="Carrusel de obras destacadas" tabindex="0">
+        <article class="work-card reveal-tilt">
+          <a href="assets HD/Captura de pantalla 2026-09-13 022642.webp" class="work-image image-reveal"
+            data-lightbox-title="BULLDOG REALISTA" aria-label="Ampliar tatuaje de bulldog realista">
+            <img src="assets HD/Captura de pantalla 2026-09-13 022642.webp" alt="Tatuaje realista de un bulldog"
+              loading="lazy" decoding="async" />
+            <div class="work-overlay"><span>VER OBRA</span><b>↗</b></div>
+          </a>
+          <div class="work-meta">
+            <h3>BULLDOG REALISTA</h3>
+            <small>TATUAJE EN BRAZO</small>
+          </div>
+        </article>
+
+        <article class="work-card reveal-tilt">
+          <a href="assets HD/Captura de pantalla 2026-09-13 022930.webp" class="work-image image-reveal"
+            data-lightbox-title="JOYA DE LUJO" aria-label="Ampliar tatuaje de serpiente y flores">
+            <img src="assets HD/Captura de pantalla 2026-09-13 022930.webp" alt="Tatuaje de serpiente y flores"
+              loading="lazy" decoding="async" />
+            <div class="work-overlay"><span>VER OBRA</span><b>↗</b></div>
+          </a>
+          <div class="work-meta">
+            <h3>JOYA DE LUJO</h3>
+            <small>TATUAJE EN CUELLO</small>
+          </div>
+        </article>
+
+        <article class="work-card reveal-tilt">
+          <a href="assets HD/Captura de pantalla 2026-09-13 023620.webp" class="work-image image-reveal"
+            data-lightbox-title="TIGRE REALISTA" aria-label="Ampliar tatuaje de tigre realista">
+            <img src="assets HD/Captura de pantalla 2026-09-13 023620.webp" alt="Tatuaje realista de un tigre"
+              loading="lazy" decoding="async" />
+            <div class="work-overlay"><span>VER OBRA</span><b>↗</b></div>
+          </a>
+          <div class="work-meta">
+            <h3>TIGRE REALISTA</h3>
+            <small>TATUAJE EN BRAZO</small>
+          </div>
+        </article>
+
+        <article class="work-card reveal-tilt">
+          <a href="assets HD/Captura de pantalla 2026-09-13 030158.webp" class="work-image image-reveal"
+            data-lightbox-title="ALAS DE ANGEL REALISTA" aria-label="Ampliar tatuaje de colibrí realista">
+            <img src="assets HD/Captura de pantalla 2026-09-13 030158.webp" alt="Tatuaje realista de un colibrí"
+              loading="lazy" decoding="async" />
+            <div class="work-overlay"><span>VER OBRA</span><b>↗</b></div>
+          </a>
+          <div class="work-meta">
+            <h3>ALAS DE ANGEL REALISTA</h3>
+            <small>TATUAJE EN ESPALDA</small>
+          </div>
+        </article>
+
+        <article class="work-card reveal-tilt">
+          <a href="assets HD/Captura de pantalla 2026-09-13 023927.webp" class="work-image image-reveal"
+            data-lightbox-title="MARIPOSA BOTÁNICA" aria-label="Ampliar tatuaje de mariposa botánica">
+            <img src="assets HD/Captura de pantalla 2026-09-13 023927.webp" alt="Tatuaje de mariposa botánica en el pecho"
+              loading="lazy" decoding="async" />
+            <div class="work-overlay"><span>VER OBRA</span><b>↗</b></div>
+          </a>
+          <div class="work-meta">
+            <h3>MARIPOSA BOTÁNICA</h3>
+            <small>TATUAJE EN PECHO</small>
+          </div>
+        </article>
+
+        <article class="work-card reveal-tilt">
+          <a href="assets HD/Captura de pantalla 2026-09-13 025008.webp" class="work-image image-reveal"
+            data-lightbox-title="RETRATO CANINO" aria-label="Ampliar tatuaje de retrato canino">
+            <img src="assets HD/Captura de pantalla 2026-09-13 025008.webp" alt="Tatuaje realista de un perro"
+              loading="lazy" decoding="async" />
+            <div class="work-overlay"><span>VER OBRA</span><b>↗</b></div>
+          </a>
+          <div class="work-meta">
+            <h3>RETRATO CANINO</h3>
+            <small>TATUAJE EN BRAZO</small>
+          </div>
+        </article>
+
+        <article class="work-card reveal-tilt">
+          <a href="assets HD/Captura de pantalla 2026-09-13 025036.webp" class="work-image image-reveal"
+            data-lightbox-title="LÉON EN CRUZ" aria-label="Ampliar tatuaje botánico">
+            <img src="assets HD/Captura de pantalla 2026-09-13 025036.webp" alt="Tatuaje botánico realista en la pierna"
+              loading="lazy" decoding="async" />
+            <div class="work-overlay"><span>VER OBRA</span><b>↗</b></div>
+          </a>
+          <div class="work-meta">
+            <h3>LEÓN EN CRUZ</h3>
+            <small>TATUAJE EN BRAZO</small>
+          </div>
+        </article>
+
+        <article class="work-card reveal-tilt">
+          <a href="assets HD/Captura de pantalla 2026-09-13 025403.webp" class="work-image image-reveal"
+            data-lightbox-title="PULPO REALISTA" aria-label="Ampliar tatuaje de pulpo realista">
+            <img src="assets HD/Captura de pantalla 2026-09-13 025403.webp" alt="Tatuaje realista de un pulpo"
+              loading="lazy" decoding="async" />
+            <div class="work-overlay"><span>VER OBRA</span><b>↗</b></div>
+          </a>
+          <div class="work-meta">
+            <h3>PULPO REALISTA</h3>
+            <small>TATUAJE EN ABDOMEN</small>
+          </div>
+        </article>
+
+        <article class="work-card reveal-tilt">
+          <a href="assets HD/Captura de pantalla 2026-09-13 025435.webp" class="work-image image-reveal"
+            data-lightbox-title="OJO REALISTA" aria-label="Ampliar tatuaje de ojo realista">
+            <img src="assets HD/Captura de pantalla 2026-09-13 025435.webp" alt="Tatuaje realista de un ojo"
+              loading="lazy" decoding="async" />
+            <div class="work-overlay"><span>VER OBRA</span><b>↗</b></div>
+          </a>
+          <div class="work-meta">
+            <h3>OJO REALISTA</h3>
+            <small>TATUAJE EN BRAZO</small>
+          </div>
+        </article>
+
+        <article class="work-card reveal-tilt">
+          <a href="assets HD/Captura de pantalla 2026-09-13 030348.webp" class="work-image image-reveal"
+            data-lightbox-title="SERPIENTE ORNAMENTAL" aria-label="Ampliar tatuaje de serpiente ornamental">
+            <img src="assets HD/Captura de pantalla 2026-09-13 030348.webp" alt="Tatuaje ornamental de una serpiente"
+              loading="lazy" decoding="async" />
+            <div class="work-overlay"><span>VER OBRA</span><b>↗</b></div>
+          </a>
+          <div class="work-meta">
+            <h3>SERPIENTE ORNAMENTAL</h3>
+            <small>TATUAJE EN BRAZO</small>
+          </div>
+        </article>
+      </div>
+      </div>
+
+      <a class="btn centered magnetic" href="#contacto">CONSULTAR DISPONIBILIDAD <i>↗</i></a>
+    </section>
+
+    <section class="process section" id="proceso">
+      <div class="process-inner">
+        <div class="process-copy reveal">
+          <p class="section-kicker">PROCESO</p>
+          <h2>CADA TRAZO<br><span>TIENE UN PROPÓSITO.</span></h2>
+
+          <div class="steps">
+            <div class="step">
+              <div class="step-icon">◌</div><span>IDEA</span><small>Todo comienza<br>con una idea.</small>
+            </div>
+            <div class="step-arrow">→</div>
+            <div class="step">
+              <div class="step-icon">◍</div><span>BOCETO</span><small>Dibujo la esencia<br>en papel.</small>
+            </div>
+            <div class="step-arrow">→</div>
+            <div class="step">
+              <div class="step-icon">✦</div><span>DETALLES</span><small>Cada detalle cobra<br>vida.</small>
+            </div>
+            <div class="step-arrow">→</div>
+            <div class="step">
+              <div class="step-icon">□</div><span>OBRA FINAL</span><small>Una pieza única,<br>lista para
+                inspirar.</small>
+            </div>
+          </div>
+        </div>
+
+        <div class="process-media image-reveal parallax" data-speed="0.13">
+          <img src="assets HD/Captura de pantalla 2026-09-13 024940.webp" alt="Máquina de tatuar realizando un diseño"
+            loading="lazy" decoding="async" />
+        </div>
+      </div>
+    </section>
+
+    <section class="cta section reveal" id="contacto">
+      <div class="cta-copy">
+        <p class="section-kicker">ESCRIBENOS</p>
+        <h2>¿QUIERES UNA OBRA<br><em>PERSONALIZADA?</em></h2>
+        <p>Escríbeme y hagamos<br>realidad tu idea.</p>
+      </div>
+
+      <div class="cta-signature">
+        <div class="mini-logo">JD</div>
+        <p>JAVIER DIBUJOS</p>
+        <span>Arte hecho a mano.</span>
+      </div>
+
+      <div class="socials">
+        <a href="https://www.instagram.com/javierdibujos/" target="_blank" rel="noopener noreferrer" aria-label="Instagram">◎
+          <span>INSTAGRAM</span></a>
+        <a href="https://api.whatsapp.com/send/?phone=56982118085&text=Hola%2C%20para%20que%20tengas%20una%20respuesta%20r%C3%A1pida%2C%20responde%20los%20siguientes%20puntos%3A%0A%0A%E2%80%A2Describe%20tu%20idea%20y%2Fo%20d%C3%A9jame%20im%C3%A1genes%20de%20referencia.%0A%0A%E2%80%A2Medida%20en%20cent%C3%ADmetros.%0A%0A%E2%80%A2Zona%20en%20la%20que%20quieres%20el%20tatuaje.%0A%0A%0AInstagram.com%2FJavierdibujos" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp">◔
+          <span>WHATSAPP</span></a>
+      </div>
+
+      <form class="contact-form" id="contactForm" action="https://formspree.io/f/xaenywdo" method="post"
+        accept-charset="UTF-8" autocomplete="on">
+        <div class="field-row">
+          <label class="sr-only" for="name">Nombre</label>
+          <input id="name" type="text" name="nombre" placeholder="Nombre" autocomplete="name" required>
+          <label class="sr-only" for="email">Email</label>
+          <input id="email" type="email" name="email" placeholder="Email" autocomplete="email" required>
+        </div>
+        <label class="sr-only" for="message">Mensaje</label>
+        <textarea id="message" name="mensaje" placeholder="Mensaje" rows="4" required></textarea>
+        <input type="hidden" name="_subject" value="Nueva consulta desde Javier Dibujos">
+        <button class="btn magnetic" type="submit"><span>ENVIAR</span><i>↗</i></button>
+        <p class="form-status" id="formStatus" role="status" aria-live="polite"></p>
+      </form>
+    </section>
+  </main>
+
+  <dialog class="work-dialog" id="workDialog" aria-labelledby="dialogTitle">
+    <button class="dialog-close" type="button" aria-label="Cerrar vista ampliada">×</button>
+    <img class="dialog-image" id="dialogImage" alt="" />
+    <div class="dialog-meta">
+    <p class="section-kicker">OBRA ORIGINAL</p>
+    <h2 id="dialogTitle"></h2>
+    <a class="btn" href="#contacto" id="dialogCta">CONSULTAR ESTA OBRA <i>↗</i></a>
+    </div>
+  </dialog>
+
+  <footer class="footer">
+    <span>© 2026 Javier Dibujos. Todos los derechos reservados.</span>
+    <span>Política de privacidad</span>
+    <span>Términos y condiciones</span>
+  </footer>
+
+  <div class="cursor" id="cursor" aria-hidden="true"><span></span></div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+  <script type="module" src="script.js"></script>
+</body>
+
+</html>
